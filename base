@@ -1,0 +1,64 @@
+DROP DATABASE n_melkov;
+CREATE DATABASE n_melkov WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'Russian_Russia.1251' LC_CTYPE = 'Russian_Russia.1251';
+ALTER DATABASE n_melkov OWNER TO postgres;
+
+\connect n_melkov
+
+SET search_path = public;
+
+CREATE TABLE "customers" (
+    "custid" serial NOT NULL,
+    "username" text NOT NULL UNIQUE
+);
+
+
+ALTER TABLE "customers" OWNER TO postgres;
+
+
+CREATE TABLE "reserve" (
+    "custid" integer NOT NULL,
+    "prodid" integer NOT NULL,
+    "amount" integer
+);
+
+
+ALTER TABLE "reserve" OWNER TO postgres;
+
+
+CREATE TABLE "products" (
+    "prodid" serial NOT NULL,
+    "prodname" text NOT NULL,
+    "remain" integer,
+    CONSTRAINT "remain_check" CHECK (remain>=0)
+);
+
+
+ALTER TABLE "products" OWNER TO postgres;
+
+
+
+
+
+ALTER TABLE ONLY "customers"
+    ADD CONSTRAINT customers_pk PRIMARY KEY ("custid");
+
+
+ALTER TABLE ONLY "reserve"
+    ADD CONSTRAINT reserve_pk PRIMARY KEY ("custid", "prodid");
+
+
+ALTER TABLE ONLY "products"
+    ADD CONSTRAINT products_pk PRIMARY KEY ("prodid");
+
+
+ALTER TABLE ONLY "reserve"
+    ADD CONSTRAINT "reserve_fk0" FOREIGN KEY ("prodid") REFERENCES "products"("prodid");
+
+
+ALTER TABLE ONLY "reserve"
+    ADD CONSTRAINT "reserve_fk1" FOREIGN KEY ("custid") REFERENCES "customers"("custid");
+
+INSERT INTO "products" VALUES (1,'ked',1000);
+INSERT INTO "products" VALUES (2,'shirt',1000);
+INSERT INTO "products" VALUES (3,'hat',1000);
+INSERT INTO "customers" VALUES(1,'admin');
