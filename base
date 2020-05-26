@@ -1,4 +1,4 @@
-// через psql shell
+-- через psql shell Host=localhost;Username=postgres;Password=1234;Database=n_melkov
 DROP DATABASE n_melkov;
 CREATE DATABASE n_melkov WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'Russian_Russia.1251' LC_CTYPE = 'Russian_Russia.1251';
 ALTER DATABASE n_melkov OWNER TO postgres;
