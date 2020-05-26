@@ -61,4 +61,3 @@ ALTER TABLE ONLY "reserve"
 INSERT INTO "products" VALUES (1,'ked',1000);
 INSERT INTO "products" VALUES (2,'shirt',1000);
 INSERT INTO "products" VALUES (3,'hat',1000);
-INSERT INTO "customers" VALUES(1,'admin');
