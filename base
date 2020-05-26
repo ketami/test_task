@@ -58,6 +58,6 @@ ALTER TABLE ONLY "reserve"
 ALTER TABLE ONLY "reserve"
     ADD CONSTRAINT "reserve_fk1" FOREIGN KEY ("custid") REFERENCES "customers"("custid");
 
-INSERT INTO "products" VALUES (1,'ked',1000);
-INSERT INTO "products" VALUES (2,'shirt',1000);
-INSERT INTO "products" VALUES (3,'hat',1000);
+INSERT INTO "products" VALUES (1,'ked',100);
+INSERT INTO "products" VALUES (2,'shirt',100);
+INSERT INTO "products" VALUES (3,'hat',100);
