@@ -23,7 +23,7 @@ namespace ConsoleApp2
         }
        public static void Registration(NpgsqlConnection con, string username)
         {
-            var checkuser = "INSERT INTO customers(username) VALUES (@username) ON CONFLICT ON CONSTRAINT username_unique DO NOTHING;";
+            var checkuser = "INSERT INTO customers(username) VALUES (@username) ON CONFLICT ON CONSTRAINT customers_username_key DO NOTHING;";
             using var cmd = new NpgsqlCommand(checkuser, con);
             {
                 NpgsqlParameter prm = new NpgsqlParameter();
@@ -33,12 +33,12 @@ namespace ConsoleApp2
             }
             cmd.ExecuteNonQuery();
             {
-             // Console.WriteLine("ACCOUNT, " + username);
+            //  Console.WriteLine("ACCOUNT HELLO, " + username);
             }
         }
         static void Buying(NpgsqlConnection con, string arg0, string arg1, int arg2)
         {
-            var checkreserve = "select * from ((reserve join products using (prodid)) join customers using (custid)) where username = @username and prodname = @prodname;";
+            var checkreserve = "select version()";
             using var cmd = new NpgsqlCommand(checkreserve, con);
             {
                 NpgsqlParameter prm = new NpgsqlParameter();
@@ -54,39 +54,23 @@ namespace ConsoleApp2
                 prm3.Value = arg2;
                 cmd.Parameters.Add(prm3);
             }
-            var startTime2 = System.Diagnostics.Stopwatch.StartNew();
+
             try
             {
                 Console.WriteLine("Начинает покупку " + arg0 + " " + arg2 + " " + arg1);
 
 
-                var startTime = System.Diagnostics.Stopwatch.StartNew();
-                cmd.CommandText = "begin work; update products set remain = remain - @amount where prodname = @prodname;insert into reserve(custid, prodid, amount)values ((select custid from customers where username = @username),(select prodid from products where prodname = @prodname),@amount)ON CONFLICT ON CONSTRAINT reserve_pk DO update set amount=reserve.amount+@amount where (reserve.custid = ((select custid from customers where username=@username)) and (reserve.prodid= (select prodid from products where prodname=@prodname)));commit work;";
+                cmd.CommandText = "begin work; update products set remain = remain - @amount where prodname = @prodname; insert into reserve(custid, prodid, amount)values ((select custid from customers where username = @username),(select prodid from products where prodname = @prodname),@amount)ON CONFLICT ON CONSTRAINT reserve_pk DO update set amount=reserve.amount+@amount where (reserve.custid = ((select custid from customers where username=@username)) and (reserve.prodid= (select prodid from products where prodname=@prodname)));commit work;";
                 cmd.ExecuteNonQuery();
 
-                startTime.Stop();
-                startTime2.Stop();
-                var resultTime = startTime.Elapsed;
-                // elapsedTime - строка, которая будет содержать значение затраченного времени
-                string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:000}",
-                    resultTime.Hours,
-                    resultTime.Minutes,
-                    resultTime.Seconds,
-                    resultTime.Milliseconds);
-                Console.WriteLine("Заканчивает покупку " + arg0 + " за " + elapsedTime);
+                Console.WriteLine("Заканчивает покупку " + arg0 );
             }
             catch (Npgsql.PostgresException ex)
             {
-                var resultTime2 = startTime2.Elapsed;
-                // elapsedTime - строка, которая будет содержать значение затраченного времени
-                string elapsedTime2 = String.Format("{0:00}:{1:00}:{2:00}.{3:000}",
-                    resultTime2.Hours,
-                    resultTime2.Minutes,
-                    resultTime2.Seconds,
-                    resultTime2.Milliseconds);
+            
                 if (ex.SqlState == "23514")
                 {
-                    Console.WriteLine("Извините, " + arg0 + ", товар закончился." + " Выполнено за " + elapsedTime2);
+                    Console.WriteLine("Извините, " + arg0 + ", товар закончился.");
                     Program.CHECKREMAIN = false;
                 }
                 else
@@ -132,7 +116,7 @@ namespace ConsoleApp2
                 myThread4.Start();
                 myThread5.Start();
                 myThread6.Start();
-                Thread.Sleep(50);
+                Thread.Sleep(200);
             }
         }
 
