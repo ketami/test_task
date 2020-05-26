@@ -1,3 +1,4 @@
+// через psql shell
 DROP DATABASE n_melkov;
 CREATE DATABASE n_melkov WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'Russian_Russia.1251' LC_CTYPE = 'Russian_Russia.1251';
 ALTER DATABASE n_melkov OWNER TO postgres;
@@ -61,3 +62,4 @@ ALTER TABLE ONLY "reserve"
 INSERT INTO "products" VALUES (1,'ked',100);
 INSERT INTO "products" VALUES (2,'shirt',100);
 INSERT INTO "products" VALUES (3,'hat',100);
+
