@@ -1,3 +1,4 @@
+//Нужен пакет PostgreSQL
 using System;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.DependencyInjection;
